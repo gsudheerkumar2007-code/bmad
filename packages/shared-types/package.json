@@ -1,0 +1,19 @@
+{
+  "name": "@ecommerce/shared-types",
+  "version": "1.0.0",
+  "description": "Shared TypeScript interfaces and types for the e-commerce platform",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.13.1",
+    "@typescript-eslint/parser": "^6.13.1",
+    "eslint": "^8.55.0",
+    "typescript": "^5.3.3"
+  }
+}

@@ -1,0 +1,24 @@
+schema: 1
+story: '1.1'
+gate: CONCERNS
+status_reason: 'Hardcoded secrets in docker-compose.yml and missing routing configuration prevent pass despite strong architecture.'
+reviewer: 'Quinn'
+updated: '2025-09-20T00:00:00Z'
+top_issues:
+  - id: 'SEC-001'
+    severity: high
+    finding: 'Hardcoded production-unsafe credentials in docker-compose.yml (admin:password, JWT secret)'
+    suggested_action: 'Replace with environment variables or Docker secrets for all credentials'
+  - id: 'ARCH-001'
+    severity: high
+    finding: 'Angular routing configuration is empty (routes array has no routes defined)'
+    suggested_action: 'Add at least default route or 404 handler to demonstrate routing functionality'
+  - id: 'SEC-002'
+    severity: medium
+    finding: 'Docker containers running as root user without security hardening'
+    suggested_action: 'Create non-root users in Dockerfiles and run containers with restricted privileges'
+  - id: 'ARCH-002'
+    severity: medium
+    finding: 'Frontend production environment uses process.env which will not work in browser'
+    suggested_action: 'Use Angular build-time environment replacement or runtime configuration service'
+waiver: { active: false }
