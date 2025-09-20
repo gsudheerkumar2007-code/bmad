@@ -255,7 +255,7 @@ info:
   version: 1.0.0
   description: RESTful API for e-commerce platform with product catalog, cart management, and order processing
 servers:
-  - url: http://localhost:3000/api
+  - url: http://localhost:3001/api
     description: Development server
   - url: https://api.ecommerce-platform.com
     description: Production server

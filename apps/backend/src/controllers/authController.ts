@@ -4,10 +4,11 @@ const bcrypt = require('bcrypt');
 import { User } from '../models/User';
 
 export class AuthController {
-  private JWT_SECRET = process.env.JWT_SECRET;
-  private JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
-  private JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '15m';
-  private JWT_REFRESH_EXPIRES_IN = process.env.JWT_REFRESH_EXPIRES_IN || '7d';
+  private get JWT_SECRET() { return process.env.JWT_SECRET; }
+  private get JWT_REFRESH_SECRET() { return process.env.JWT_REFRESH_SECRET; }
+  private get JWT_EXPIRES_IN() { return process.env.JWT_EXPIRES_IN || '15m'; }
+  private get JWT_REFRESH_EXPIRES_IN() { return process.env.JWT_REFRESH_EXPIRES_IN || '7d'; }
+
 
   async register(req: Request, res: Response): Promise<void> {
     try {
@@ -44,7 +45,7 @@ export class AuthController {
       // Create user
       const user = new User({
         email: email.toLowerCase(),
-        password: hashedPassword,
+        password: password,
         firstName,
         lastName
       });
@@ -95,9 +96,9 @@ export class AuthController {
         });
         return;
       }
-
+      console.log(password +" , "+ user.password);
       // Check password
-      const isPasswordValid = await bcrypt.compare(password, user.password);
+      const isPasswordValid = await bcrypt.compare(password, user.password);//(password === user.password) ? true : false; 
       if (!isPasswordValid) {
         res.status(401).json({
           error: 'Invalid email or password'
@@ -120,7 +121,7 @@ export class AuthController {
       res.json({
         message: 'Login successful',
         user: userResponse,
-        tokens
+        // tokens
       });
     } catch (error) {
       res.status(401).json({
@@ -270,6 +271,13 @@ export class AuthController {
   }
 
   private generateTokens(user: any) {
+    if (!this.JWT_SECRET) {
+      throw new Error('JWT_SECRET environment variable is not set');
+    }
+    if (!this.JWT_REFRESH_SECRET) {
+      throw new Error('JWT_REFRESH_SECRET environment variable is not set');
+    }
+
     const payload = {
       userId: user._id.toString(),
       email: user.email,
