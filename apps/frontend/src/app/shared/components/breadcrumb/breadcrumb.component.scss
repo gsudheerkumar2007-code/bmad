@@ -1,0 +1,176 @@
+.breadcrumb-nav {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  padding: 12px 0;
+}
+
+.breadcrumb-list {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 0 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  &.first {
+    .breadcrumb-link,
+    .breadcrumb-current {
+      .home-icon {
+        font-size: 18px;
+        margin-right: 4px;
+      }
+    }
+  }
+
+  &.current {
+    .breadcrumb-current {
+      color: #6c757d;
+      font-weight: 500;
+    }
+  }
+
+  .breadcrumb-link {
+    display: flex;
+    align-items: center;
+    color: #007bff;
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    font-size: 14px;
+
+    &:hover {
+      background-color: #e7f3ff;
+      color: #0056b3;
+      text-decoration: underline;
+    }
+
+    &:focus {
+      outline: 2px solid #007bff;
+      outline-offset: 2px;
+    }
+
+    .breadcrumb-text {
+      white-space: nowrap;
+    }
+  }
+
+  .breadcrumb-current {
+    display: flex;
+    align-items: center;
+    color: #495057;
+    font-weight: 500;
+    padding: 4px 8px;
+    font-size: 14px;
+
+    .breadcrumb-text {
+      white-space: nowrap;
+    }
+  }
+
+  .breadcrumb-separator {
+    color: #6c757d;
+    font-size: 16px;
+    margin: 0 4px;
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .breadcrumb-list {
+    padding: 0 8px;
+  }
+
+  .breadcrumb-item {
+    .breadcrumb-link,
+    .breadcrumb-current {
+      padding: 3px 6px;
+      font-size: 13px;
+
+      .breadcrumb-text {
+        max-width: 120px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    &.first {
+      .breadcrumb-link,
+      .breadcrumb-current {
+        .breadcrumb-text {
+          display: none; // Show only home icon on mobile
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .breadcrumb-list {
+    padding: 0 4px;
+  }
+
+  .breadcrumb-item {
+    .breadcrumb-link,
+    .breadcrumb-current {
+      .breadcrumb-text {
+        max-width: 80px;
+      }
+    }
+
+    .breadcrumb-separator {
+      margin: 0 2px;
+      font-size: 14px;
+    }
+  }
+}
+
+// Dark theme support (foundation for future implementation)
+@media (prefers-color-scheme: dark) {
+  .breadcrumb-nav {
+    background-color: #212529;
+    border-bottom-color: #495057;
+  }
+
+  .breadcrumb-item {
+    .breadcrumb-link {
+      color: #66b3ff;
+
+      &:hover {
+        background-color: #495057;
+        color: #80c7ff;
+      }
+    }
+
+    .breadcrumb-current {
+      color: #adb5bd;
+    }
+
+    .breadcrumb-separator {
+      color: #6c757d;
+    }
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .breadcrumb-item {
+    .breadcrumb-link {
+      border: 1px solid transparent;
+
+      &:hover,
+      &:focus {
+        border-color: currentColor;
+      }
+    }
+  }
+}

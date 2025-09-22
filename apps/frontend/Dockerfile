@@ -1,5 +1,9 @@
 FROM node:20-alpine
 
+# Create a non-root user
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S frontend -u 1001 -G nodejs
+
 WORKDIR /app
 
 # Copy package files
@@ -13,6 +17,12 @@ RUN npm install
 
 # Copy source code
 COPY apps/frontend/ .
+
+# Change ownership to non-root user
+RUN chown -R frontend:nodejs /app
+
+# Switch to non-root user
+USER frontend
 
 # Expose port
 EXPOSE 4200

@@ -1,0 +1,67 @@
+<div class="help-container">
+  <div class="help-header">
+    <h1>
+      <mat-icon>help</mat-icon>
+      Help Center
+    </h1>
+    <p>Find answers to common questions and get support</p>
+  </div>
+
+  <!-- Quick Help Categories -->
+  <section class="help-categories">
+    <h2>Browse by Category</h2>
+    <div class="categories-grid">
+      <mat-card *ngFor="let category of helpCategories" class="category-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>{{ category.icon }}</mat-icon>
+            {{ category.title }}
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <ul>
+            <li *ngFor="let item of category.items">{{ item }}</li>
+          </ul>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="faq-section">
+    <h2>Frequently Asked Questions</h2>
+    <mat-expansion-panel *ngFor="let faq of faqItems">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ faq.question }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <p>{{ faq.answer }}</p>
+    </mat-expansion-panel>
+  </section>
+
+  <!-- Contact Support -->
+  <section class="contact-support">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>support_agent</mat-icon>
+          Need More Help?
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Can't find what you're looking for? Our support team is here to help!</p>
+        <div class="support-actions">
+          <button mat-raised-button color="primary" (click)="onContactSupport()">
+            <mat-icon>email</mat-icon>
+            Contact Support
+          </button>
+          <a mat-button routerLink="/contact">
+            <mat-icon>phone</mat-icon>
+            View Contact Info
+          </a>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </section>
+</div>

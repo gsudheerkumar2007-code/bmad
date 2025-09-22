@@ -1,0 +1,90 @@
+<footer class="app-footer">
+  <div class="footer-container">
+    <!-- Main Footer Content -->
+    <div class="footer-content">
+      <!-- Company Information -->
+      <div class="footer-section company-info">
+        <div class="company-logo">
+          <mat-icon class="logo-icon">shopping_cart</mat-icon>
+          <h3>E-Commerce</h3>
+        </div>
+        <p class="company-description">
+          Your trusted online marketplace for quality products at great prices.
+          Shop with confidence and enjoy our exceptional customer service.
+        </p>
+        <div class="contact-info">
+          <p><mat-icon inline>email</mat-icon> support&#64;ecommerce.com</p>
+          <p><mat-icon inline>phone</mat-icon> 1-800-SHOP-NOW</p>
+          <p><mat-icon inline>location_on</mat-icon> 123 Commerce St, Shopping City, SC 12345</p>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="footer-section">
+        <h4>Quick Links</h4>
+        <ul class="footer-links">
+          <li *ngFor="let link of quickLinks">
+            <a [routerLink]="link.route">{{ link.label }}</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Customer Service -->
+      <div class="footer-section">
+        <h4>Customer Service</h4>
+        <ul class="footer-links">
+          <li *ngFor="let link of customerServiceLinks">
+            <a [routerLink]="link.route">{{ link.label }}</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Legal -->
+      <div class="footer-section">
+        <h4>Legal</h4>
+        <ul class="footer-links">
+          <li *ngFor="let link of legalLinks">
+            <a [routerLink]="link.route">{{ link.label }}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <mat-divider class="footer-divider"></mat-divider>
+
+    <!-- Bottom Footer -->
+    <div class="footer-bottom">
+      <div class="footer-bottom-content">
+        <!-- Copyright -->
+        <div class="copyright">
+          <p>&copy; {{ currentYear }} E-Commerce Platform. All rights reserved.</p>
+        </div>
+
+        <!-- Social Media Links -->
+        <div class="social-links">
+          <span class="social-label">Follow Us:</span>
+          <button
+            *ngFor="let social of socialLinks"
+            mat-icon-button
+            (click)="onSocialLinkClick(social.url)"
+            [title]="social.name"
+            class="social-btn">
+            <mat-icon>{{ social.icon }}</mat-icon>
+          </button>
+        </div>
+
+        <!-- Additional Info -->
+        <div class="additional-info">
+          <span class="security-badge">
+            <mat-icon>security</mat-icon>
+            Secure Shopping
+          </span>
+          <span class="shipping-badge">
+            <mat-icon>local_shipping</mat-icon>
+            Free Shipping Over $50
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

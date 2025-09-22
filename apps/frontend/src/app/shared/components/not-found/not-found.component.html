@@ -1,0 +1,64 @@
+<div class="not-found-container">
+  <mat-card class="not-found-card">
+    <mat-card-content class="content">
+      <!-- Error Illustration -->
+      <div class="error-illustration">
+        <mat-icon class="error-icon">error_outline</mat-icon>
+        <div class="error-code">404</div>
+      </div>
+
+      <!-- Error Message -->
+      <div class="error-message">
+        <h1>Oops! Page Not Found</h1>
+        <p class="error-description">
+          The page you're looking for doesn't exist or has been moved.
+          Don't worry, it happens to the best of us!
+        </p>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="onGoBack()"
+          class="primary-action">
+          <mat-icon>arrow_back</mat-icon>
+          Go Back
+        </button>
+
+        <button
+          mat-raised-button
+          routerLink="/"
+          class="home-action">
+          <mat-icon>home</mat-icon>
+          Go to Home
+        </button>
+      </div>
+
+      <!-- Helpful Links -->
+      <div class="helpful-links">
+        <h3>Or try one of these:</h3>
+        <div class="links-grid">
+          <a
+            *ngFor="let link of helpfulLinks"
+            [routerLink]="link.route"
+            mat-stroked-button
+            class="helpful-link">
+            <mat-icon>{{ link.icon }}</mat-icon>
+            <span>{{ link.label }}</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Search Suggestion -->
+      <div class="search-suggestion">
+        <p>Looking for something specific?</p>
+        <button mat-button color="accent" routerLink="/products">
+          <mat-icon>search</mat-icon>
+          Search Products
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

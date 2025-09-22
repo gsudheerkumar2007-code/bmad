@@ -1,0 +1,74 @@
+<div class="profile-container">
+  <mat-card class="profile-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>person</mat-icon>
+        User Profile
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <ng-container *ngIf="currentUser$ | async as user; else notLoggedIn">
+        <mat-tab-group>
+          <mat-tab label="Personal Information">
+            <div class="profile-section">
+              <div class="profile-field">
+                <mat-form-field appearance="outline">
+                  <mat-label>First Name</mat-label>
+                  <input matInput [value]="user.firstName" [readonly]="!isEditing">
+                </mat-form-field>
+              </div>
+
+              <div class="profile-field">
+                <mat-form-field appearance="outline">
+                  <mat-label>Last Name</mat-label>
+                  <input matInput [value]="user.lastName" [readonly]="!isEditing">
+                </mat-form-field>
+              </div>
+
+              <div class="profile-field">
+                <mat-form-field appearance="outline">
+                  <mat-label>Email</mat-label>
+                  <input matInput [value]="user.email" [readonly]="!isEditing">
+                </mat-form-field>
+              </div>
+
+              <div class="profile-actions">
+                <button mat-raised-button color="primary" *ngIf="!isEditing" (click)="onEditProfile()">
+                  <mat-icon>edit</mat-icon>
+                  Edit Profile
+                </button>
+
+                <div *ngIf="isEditing">
+                  <button mat-raised-button color="primary" (click)="onSaveProfile()">
+                    <mat-icon>save</mat-icon>
+                    Save Changes
+                  </button>
+                  <button mat-button (click)="onCancelEdit()">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+
+          <mat-tab label="Account Settings">
+            <div class="profile-section">
+              <p>Account settings will be available in future updates.</p>
+              <p><strong>Account Created:</strong> {{ user.createdAt | date:'medium' }}</p>
+              <p><strong>Admin Access:</strong> {{ user.isAdmin ? 'Yes' : 'No' }}</p>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </ng-container>
+
+      <ng-template #notLoggedIn>
+        <div class="not-logged-in">
+          <mat-icon>error</mat-icon>
+          <p>You must be logged in to view your profile.</p>
+          <a mat-raised-button color="primary" routerLink="/auth/login">Login</a>
+        </div>
+      </ng-template>
+    </mat-card-content>
+  </mat-card>
+</div>

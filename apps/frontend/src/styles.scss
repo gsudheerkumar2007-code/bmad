@@ -1,6 +1,164 @@
 /* You can add global styles to this file, and also import other style files */
 
-@import '@angular/material/prebuilt-themes/indigo-pink.css';
+// Import custom Material Design theme
+@import './app/core/theme/custom-theme.scss';
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+// Global styles
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--mat-sys-body-font, 'Roboto', 'Helvetica Neue', sans-serif);
+  line-height: 1.5;
+  color: var(--text-primary);
+  background-color: var(--background-color);
+  transition: background-color var(--transition-normal), color var(--transition-normal);
+}
+
+// Typography utilities
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-disabled { color: var(--text-disabled); }
+.text-hint { color: var(--text-hint); }
+
+// Background utilities
+.bg-primary { background-color: var(--primary-color); }
+.bg-accent { background-color: var(--accent-color); }
+.bg-surface { background-color: var(--surface-color); }
+.bg-card { background-color: var(--card-background); }
+
+// Spacing utilities
+.m-0 { margin: 0; }
+.m-xs { margin: var(--spacing-xs); }
+.m-sm { margin: var(--spacing-sm); }
+.m-md { margin: var(--spacing-md); }
+.m-lg { margin: var(--spacing-lg); }
+.m-xl { margin: var(--spacing-xl); }
+
+.p-0 { padding: 0; }
+.p-xs { padding: var(--spacing-xs); }
+.p-sm { padding: var(--spacing-sm); }
+.p-md { padding: var(--spacing-md); }
+.p-lg { padding: var(--spacing-lg); }
+.p-xl { padding: var(--spacing-xl); }
+
+// Border radius utilities
+.rounded-sm { border-radius: var(--border-radius-sm); }
+.rounded-md { border-radius: var(--border-radius-md); }
+.rounded-lg { border-radius: var(--border-radius-lg); }
+.rounded-xl { border-radius: var(--border-radius-xl); }
+
+// Shadow utilities
+.shadow-sm { box-shadow: 0 1px 3px var(--shadow-color); }
+.shadow-md { box-shadow: 0 4px 6px var(--shadow-color); }
+.shadow-lg { box-shadow: 0 10px 15px var(--shadow-color); }
+
+// Layout utilities
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.gap-sm { gap: var(--spacing-sm); }
+.gap-md { gap: var(--spacing-md); }
+.gap-lg { gap: var(--spacing-lg); }
+
+// Responsive utilities
+@media (max-width: 768px) {
+  .container {
+    padding: 0 var(--spacing-sm);
+  }
+
+  .hidden-mobile { display: none; }
+}
+
+@media (min-width: 769px) {
+  .hidden-desktop { display: none; }
+}
+
+// Accessibility improvements
+*:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+// Smooth scrolling
+html {
+  scroll-behavior: smooth;
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .mat-mdc-button,
+  .mat-mdc-raised-button {
+    border: 1px solid currentColor;
+  }
+}
+
+// Angular Material overlay z-index fixes - Using higher z-index values
+body .cdk-overlay-container {
+  z-index: 9999 !important;
+}
+
+body .cdk-overlay-pane {
+  z-index: 9999 !important;
+}
+
+body .mat-mdc-menu-panel {
+  z-index: 10000 !important;
+}
+
+body .mat-menu-panel {
+  z-index: 10000 !important;
+}
+
+// More specific targeting for mat-menu with higher specificity
+body .cdk-overlay-container .mat-mdc-menu-panel {
+  z-index: 10000 !important;
+}
+
+body .cdk-overlay-container .cdk-overlay-pane {
+  z-index: 10000 !important;
+}
+
+// Global overlay backdrop fix
+.cdk-overlay-dark-backdrop,
+.cdk-overlay-transparent-backdrop {
+  z-index: 9998 !important;
+}
+
+// Print styles
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+  }
+}

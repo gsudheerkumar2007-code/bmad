@@ -1,0 +1,32 @@
+<div class="loading-container" [class.overlay]="overlay" [attr.data-size]="size">
+  <!-- Spinner Loading -->
+  <div *ngIf="type === 'spinner'" class="spinner-loading">
+    <mat-spinner
+      [diameter]="spinnerDiameter"
+      [strokeWidth]="size === 'small' ? 2 : 3">
+    </mat-spinner>
+    <p class="loading-message" *ngIf="message">{{ message }}</p>
+  </div>
+
+  <!-- Progress Bar Loading -->
+  <div *ngIf="type === 'bar'" class="bar-loading">
+    <p class="loading-message" *ngIf="message">{{ message }}</p>
+    <mat-progress-bar
+      [mode]="value !== undefined ? 'determinate' : 'indeterminate'"
+      [value]="value">
+    </mat-progress-bar>
+    <p class="progress-text" *ngIf="value !== undefined">{{ value }}%</p>
+  </div>
+
+  <!-- Skeleton Loading -->
+  <div *ngIf="type === 'skeleton'" class="skeleton-loading">
+    <div class="skeleton-item skeleton-title"></div>
+    <div class="skeleton-item skeleton-line"></div>
+    <div class="skeleton-item skeleton-line short"></div>
+    <div class="skeleton-item skeleton-line"></div>
+    <div class="skeleton-actions">
+      <div class="skeleton-button"></div>
+      <div class="skeleton-button"></div>
+    </div>
+  </div>
+</div>

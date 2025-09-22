@@ -1,0 +1,84 @@
+<div class="error-container">
+  <mat-card class="error-card">
+    <mat-card-content class="content">
+      <!-- Error Illustration -->
+      <div class="error-illustration">
+        <mat-icon class="error-icon">warning</mat-icon>
+        <div class="error-code">{{ errorCode }}</div>
+      </div>
+
+      <!-- Error Message -->
+      <div class="error-message">
+        <h1>{{ errorMessage }}</h1>
+        <p class="error-description">{{ errorDetails }}</p>
+        <p class="error-help">
+          Please try again in a few moments. If the problem persists, contact our support team.
+        </p>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="onRetry()"
+          class="retry-action">
+          <mat-icon>refresh</mat-icon>
+          Try Again
+        </button>
+
+        <button
+          mat-raised-button
+          (click)="onGoBack()"
+          class="back-action">
+          <mat-icon>arrow_back</mat-icon>
+          Go Back
+        </button>
+
+        <button
+          mat-raised-button
+          routerLink="/"
+          class="home-action">
+          <mat-icon>home</mat-icon>
+          Go to Home
+        </button>
+      </div>
+
+      <!-- Additional Help -->
+      <div class="additional-help">
+        <h3>Need Help?</h3>
+        <div class="help-options">
+          <button
+            mat-stroked-button
+            routerLink="/help"
+            class="help-option">
+            <mat-icon>help_center</mat-icon>
+            <span>Visit Help Center</span>
+          </button>
+
+          <button
+            mat-stroked-button
+            routerLink="/contact"
+            class="help-option">
+            <mat-icon>support_agent</mat-icon>
+            <span>Contact Support</span>
+          </button>
+
+          <button
+            mat-stroked-button
+            (click)="onReportError()"
+            class="help-option">
+            <mat-icon>bug_report</mat-icon>
+            <span>Report This Error</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Error ID for support -->
+      <div class="error-id">
+        <small>Error ID: {{ generateErrorId() }}</small>
+        <small>Time: {{ getCurrentTime() }}</small>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

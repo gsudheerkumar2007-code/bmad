@@ -1,0 +1,112 @@
+.help-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.help-header {
+  text-align: center;
+  margin-bottom: 3rem;
+
+  h1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+
+    mat-icon {
+      font-size: 2rem;
+      height: 2rem;
+      width: 2rem;
+    }
+  }
+
+  p {
+    color: #666;
+    font-size: 1.1rem;
+  }
+}
+
+.help-categories {
+  margin-bottom: 3rem;
+
+  h2 {
+    margin-bottom: 1.5rem;
+  }
+
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+
+    .category-card {
+      .mat-card-header {
+        .mat-card-title {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+      }
+
+      ul {
+        margin: 0;
+        padding-left: 1rem;
+
+        li {
+          margin-bottom: 0.5rem;
+          color: #666;
+        }
+      }
+    }
+  }
+}
+
+.faq-section {
+  margin-bottom: 3rem;
+
+  h2 {
+    margin-bottom: 1.5rem;
+  }
+
+  mat-expansion-panel {
+    margin-bottom: 0.5rem;
+  }
+}
+
+.contact-support {
+  .mat-card-header {
+    .mat-card-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+  }
+
+  .support-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+
+    button, a {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .help-container {
+    padding: 1rem;
+  }
+
+  .categories-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .support-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

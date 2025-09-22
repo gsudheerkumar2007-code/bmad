@@ -1,0 +1,96 @@
+<div class="about-container">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1>About E-Commerce</h1>
+      <p class="hero-subtitle">
+        Your trusted partner for quality products and exceptional shopping experiences.
+      </p>
+    </div>
+  </section>
+
+  <!-- Company Stats -->
+  <section class="stats-section">
+    <div class="stats-grid">
+      <div *ngFor="let stat of companyStats" class="stat-card">
+        <mat-icon>{{ stat.icon }}</mat-icon>
+        <h3>{{ stat.value }}</h3>
+        <p>{{ stat.label }}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Story -->
+  <section class="story-section">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Our Story</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>
+          Founded in 2024, E-Commerce began with a simple mission: to make quality products
+          accessible to everyone through an exceptional online shopping experience. What started
+          as a small team's vision has grown into a thriving marketplace serving customers worldwide.
+        </p>
+        <p>
+          We believe that shopping online should be easy, secure, and enjoyable. That's why we've
+          built our platform with cutting-edge technology, focusing on user experience and customer
+          satisfaction at every step of the journey.
+        </p>
+        <p>
+          Today, we're proud to offer thousands of products from trusted brands and sellers,
+          backed by our commitment to quality, reliability, and customer service excellence.
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </section>
+
+  <!-- Our Values -->
+  <section class="values-section">
+    <h2>Our Values</h2>
+    <div class="values-grid">
+      <mat-card *ngFor="let value of values" class="value-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>{{ value.icon }}</mat-icon>
+            {{ value.title }}
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>{{ value.description }}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </section>
+
+  <!-- Team Section -->
+  <section class="team-section">
+    <h2>Meet Our Team</h2>
+    <div class="team-grid">
+      <mat-card *ngFor="let member of teamMembers" class="team-card">
+        <div class="member-image">
+          <mat-icon>person</mat-icon>
+        </div>
+        <mat-card-content>
+          <h3>{{ member.name }}</h3>
+          <p class="role">{{ member.role }}</p>
+          <p class="bio">{{ member.bio }}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </section>
+
+  <!-- Contact CTA -->
+  <section class="contact-cta">
+    <mat-card>
+      <mat-card-content>
+        <h2>Get in Touch</h2>
+        <p>Have questions about our company or products? We'd love to hear from you!</p>
+        <a mat-raised-button color="primary" routerLink="/contact">
+          <mat-icon>email</mat-icon>
+          Contact Us
+        </a>
+      </mat-card-content>
+    </mat-card>
+  </section>
+</div>

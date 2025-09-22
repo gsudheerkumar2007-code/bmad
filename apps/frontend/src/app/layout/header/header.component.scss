@@ -1,0 +1,180 @@
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.logo-section {
+  flex-shrink: 0;
+
+  .logo-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    font-weight: 500;
+
+    .logo-icon {
+      margin-right: 8px;
+      font-size: 28px;
+      width: 28px;
+      height: 28px;
+    }
+
+    .logo-text {
+      font-size: 20px;
+      font-weight: 600;
+    }
+  }
+}
+
+.search-section {
+  flex: 1;
+  max-width: 500px;
+  margin: 0 24px;
+
+  .search-field {
+    width: 100%;
+
+    ::ng-deep .mat-mdc-form-field-flex {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+    }
+
+    ::ng-deep .mat-mdc-form-field-label {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    ::ng-deep .mat-mdc-input-element {
+      color: white;
+    }
+
+    .search-icon {
+      cursor: pointer;
+      color: rgba(255, 255, 255, 0.7);
+
+      &:hover {
+        color: white;
+      }
+    }
+  }
+}
+
+.actions-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+
+  .mobile-search-btn,
+  .cart-btn,
+  .mobile-menu-btn {
+    color: white;
+  }
+
+  .cart-btn {
+    position: relative;
+  }
+
+  .user-menu {
+    .user-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: white;
+      text-transform: none;
+
+      .user-name {
+        max-width: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+
+    // Ensure dropdown menu appears above footer with very high z-index
+    ::ng-deep .mat-mdc-menu-panel {
+      z-index: 10000 !important;
+    }
+
+    ::ng-deep .cdk-overlay-pane {
+      z-index: 10000 !important;
+    }
+
+    ::ng-deep .cdk-overlay-container {
+      z-index: 9999 !important;
+    }
+  }
+
+  .auth-buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .login-btn {
+      color: white;
+      text-transform: none;
+    }
+
+    .register-btn {
+      text-transform: none;
+      font-weight: 500;
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .header-container {
+    padding: 0 8px;
+  }
+
+  .logo-section {
+    .logo-text {
+      display: none;
+    }
+  }
+
+  .search-section {
+    display: none;
+  }
+
+  .actions-section {
+    gap: 4px;
+
+    .auth-buttons {
+      gap: 4px;
+
+      .login-btn span,
+      .register-btn span {
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .actions-section {
+    .auth-buttons {
+      .login-btn {
+        padding: 0 8px;
+      }
+
+      .register-btn {
+        padding: 0 12px;
+        font-size: 12px;
+      }
+    }
+  }
+}

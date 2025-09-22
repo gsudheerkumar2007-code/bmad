@@ -1,0 +1,133 @@
+<div class="contact-container">
+  <!-- Header -->
+  <div class="contact-header">
+    <h1>
+      <mat-icon>contact_support</mat-icon>
+      Contact Us
+    </h1>
+    <p>We're here to help! Get in touch with us through any of the channels below.</p>
+  </div>
+
+  <div class="contact-content">
+    <!-- Contact Information -->
+    <section class="contact-info">
+      <h2>How to Reach Us</h2>
+      <div class="info-grid">
+        <mat-card *ngFor="let info of contactInfo" class="info-card">
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon>{{ info.icon }}</mat-icon>
+              {{ info.title }}
+            </mat-card-title>
+            <mat-card-subtitle>{{ info.description }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div *ngFor="let detail of info.details" class="contact-detail">
+              <mat-icon>{{ detail.icon }}</mat-icon>
+              <div>
+                <strong>{{ detail.label }}:</strong>
+                <span>{{ detail.value }}</span>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </section>
+
+    <!-- Contact Form -->
+    <section class="contact-form-section">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>email</mat-icon>
+            Send us a Message
+          </mat-card-title>
+          <mat-card-subtitle>Fill out the form below and we'll get back to you soon</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Your Name</mat-label>
+                <input matInput formControlName="name" required>
+                <mat-error *ngIf="contactForm.get('name')?.invalid">
+                  {{ getErrorMessage('name') }}
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Email Address</mat-label>
+                <input matInput type="email" formControlName="email" required>
+                <mat-error *ngIf="contactForm.get('email')?.invalid">
+                  {{ getErrorMessage('email') }}
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Inquiry Type</mat-label>
+                <mat-select formControlName="inquiryType" required>
+                  <mat-option *ngFor="let type of inquiryTypes" [value]="type">
+                    {{ type }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="contactForm.get('inquiryType')?.invalid">
+                  Please select an inquiry type
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Subject</mat-label>
+              <input matInput formControlName="subject" required>
+              <mat-error *ngIf="contactForm.get('subject')?.invalid">
+                {{ getErrorMessage('subject') }}
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Message</mat-label>
+              <textarea matInput formControlName="message" rows="6" required></textarea>
+              <mat-error *ngIf="contactForm.get('message')?.invalid">
+                {{ getErrorMessage('message') }}
+              </mat-error>
+            </mat-form-field>
+
+            <div class="form-actions">
+              <button
+                mat-raised-button
+                color="primary"
+                type="submit"
+                [disabled]="contactForm.invalid">
+                <mat-icon>send</mat-icon>
+                Send Message
+              </button>
+              <button mat-button type="button" (click)="contactForm.reset()">
+                Clear Form
+              </button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </section>
+  </div>
+
+  <!-- Additional Info -->
+  <section class="additional-info">
+    <mat-card>
+      <mat-card-content>
+        <h3>
+          <mat-icon>info</mat-icon>
+          Additional Information
+        </h3>
+        <ul>
+          <li>We typically respond to inquiries within 24 hours during business days</li>
+          <li>For urgent order issues, please include your order number in your message</li>
+          <li>Technical support is available Monday through Friday, 9 AM to 6 PM EST</li>
+          <li>You can also find answers to common questions in our <a routerLink="/help">Help Center</a></li>
+        </ul>
+      </mat-card-content>
+    </mat-card>
+  </section>
+</div>

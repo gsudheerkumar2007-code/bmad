@@ -1,0 +1,38 @@
+<nav class="breadcrumb-nav" aria-label="Breadcrumb navigation">
+  <ol class="breadcrumb-list" *ngIf="breadcrumbs$ | async as breadcrumbs">
+    <li
+      *ngFor="let item of breadcrumbs; let last = last; let first = first"
+      class="breadcrumb-item"
+      [class.current]="last"
+      [class.first]="first">
+
+      <!-- Clickable breadcrumb item -->
+      <a
+        *ngIf="item.isClickable"
+        [routerLink]="item.url"
+        class="breadcrumb-link"
+        [attr.aria-current]="last ? 'page' : null"
+        (click)="onBreadcrumbClick(item)">
+        <mat-icon *ngIf="first" class="home-icon">home</mat-icon>
+        <span class="breadcrumb-text">{{ item.label }}</span>
+      </a>
+
+      <!-- Non-clickable breadcrumb item (current page) -->
+      <span
+        *ngIf="!item.isClickable"
+        class="breadcrumb-current"
+        aria-current="page">
+        <mat-icon *ngIf="first" class="home-icon">home</mat-icon>
+        <span class="breadcrumb-text">{{ item.label }}</span>
+      </span>
+
+      <!-- Separator -->
+      <mat-icon
+        *ngIf="!last"
+        class="breadcrumb-separator"
+        aria-hidden="true">
+        chevron_right
+      </mat-icon>
+    </li>
+  </ol>
+</nav>
