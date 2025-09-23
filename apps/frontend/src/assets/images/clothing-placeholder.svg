@@ -1,0 +1,49 @@
+<svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffecd2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fcb69f;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="shirtGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3498db;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2980b9;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="400" height="400" fill="url(#bgGradient)" rx="12"/>
+
+  <!-- T-Shirt -->
+  <g transform="translate(200, 200)">
+    <!-- Main body -->
+    <path d="M-60 -20 L-60 80 L60 80 L60 -20 L40 -30 L40 -50 L30 -60 L-30 -60 L-40 -50 L-40 -30 Z" fill="url(#shirtGradient)"/>
+
+    <!-- Sleeves -->
+    <path d="M-60 -20 L-80 -10 L-85 20 L-70 30 L-60 10" fill="url(#shirtGradient)"/>
+    <path d="M60 -20 L80 -10 L85 20 L70 30 L60 10" fill="url(#shirtGradient)"/>
+
+    <!-- Collar -->
+    <path d="M-20 -60 Q0 -70 20 -60 L15 -45 Q0 -50 -15 -45 Z" fill="#2c3e50"/>
+
+    <!-- Shirt details -->
+    <rect x="-50" y="-10" width="100" height="2" fill="#ffffff" opacity="0.3"/>
+    <rect x="-45" y="10" width="90" height="2" fill="#ffffff" opacity="0.2"/>
+    <rect x="-40" y="30" width="80" height="2" fill="#ffffff" opacity="0.2"/>
+
+    <!-- Buttons -->
+    <circle cx="0" cy="-30" r="3" fill="#ecf0f1" stroke="#bdc3c7" stroke-width="1"/>
+    <circle cx="0" cy="-10" r="3" fill="#ecf0f1" stroke="#bdc3c7" stroke-width="1"/>
+    <circle cx="0" cy="10" r="3" fill="#ecf0f1" stroke="#bdc3c7" stroke-width="1"/>
+
+    <!-- Pocket -->
+    <rect x="-35" y="15" width="25" height="20" fill="none" stroke="#2980b9" stroke-width="1" rx="2"/>
+
+    <!-- Shadows and highlights -->
+    <path d="M-60 -20 L-60 80 L-50 80 L-50 -15 Z" fill="#ffffff" opacity="0.1"/>
+    <path d="M50 -15 L50 80 L60 80 L60 -20 Z" fill="#000000" opacity="0.1"/>
+  </g>
+
+  <!-- Text -->
+  <text x="200" y="320" font-family="Arial, sans-serif" font-size="18" fill="#d35400" text-anchor="middle" font-weight="500">Clothing</text>
+  <text x="200" y="345" font-family="Arial, sans-serif" font-size="14" fill="#e67e22" text-anchor="middle">Coming Soon</text>
+</svg>

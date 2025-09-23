@@ -9,7 +9,7 @@ export const productSeeds = [
     price: 999.99,
     category: 'Smartphones',
     images: [
-      'assets/images/product-placeholder.svg'
+      'assets/images/smartphone-placeholder.svg'
     ],
     inventory: 50
   },
@@ -19,7 +19,7 @@ export const productSeeds = [
     price: 1199.99,
     category: 'Smartphones',
     images: [
-      'assets/images/product-placeholder.svg'
+      'assets/images/smartphone-placeholder.svg'
     ],
     inventory: 30
   },
@@ -29,7 +29,7 @@ export const productSeeds = [
     price: 699.99,
     category: 'Smartphones',
     images: [
-      'assets/images/product-placeholder.svg'
+      'assets/images/smartphone-placeholder.svg'
     ],
     inventory: 25
   },
@@ -41,7 +41,7 @@ export const productSeeds = [
     price: 2499.99,
     category: 'Laptops',
     images: [
-      'assets/images/product-placeholder.svg'
+      'assets/images/laptop-placeholder.svg'
     ],
     inventory: 15
   },
@@ -51,7 +51,7 @@ export const productSeeds = [
     price: 1299.99,
     category: 'Laptops',
     images: [
-      'assets/images/product-placeholder.svg'
+      'assets/images/laptop-placeholder.svg'
     ],
     inventory: 20
   },
@@ -63,7 +63,7 @@ export const productSeeds = [
     price: 399.99,
     category: 'Audio',
     images: [
-      'assets/images/product-placeholder.svg'
+      'assets/images/audio-placeholder.svg'
     ],
     inventory: 40
   },
@@ -73,7 +73,7 @@ export const productSeeds = [
     price: 249.99,
     category: 'Audio',
     images: [
-      'assets/images/product-placeholder.svg'
+      'assets/images/audio-placeholder.svg'
     ],
     inventory: 60
   },
@@ -85,7 +85,7 @@ export const productSeeds = [
     price: 79.99,
     category: "Men's Clothing",
     images: [
-      'assets/images/product-placeholder.svg'
+      'assets/images/clothing-placeholder.svg'
     ],
     inventory: 100
   },
@@ -95,7 +95,7 @@ export const productSeeds = [
     price: 24.99,
     category: "Men's Clothing",
     images: [
-      'assets/images/product-placeholder.svg'
+      'assets/images/clothing-placeholder.svg'
     ],
     inventory: 150
   },
@@ -107,7 +107,7 @@ export const productSeeds = [
     price: 89.99,
     category: "Women's Clothing",
     images: [
-      'assets/images/product-placeholder.svg'
+      'assets/images/clothing-placeholder.svg'
     ],
     inventory: 75
   },
@@ -117,7 +117,7 @@ export const productSeeds = [
     price: 59.99,
     category: "Women's Clothing",
     images: [
-      'assets/images/product-placeholder.svg'
+      'assets/images/clothing-placeholder.svg'
     ],
     inventory: 80
   },
@@ -129,7 +129,7 @@ export const productSeeds = [
     price: 149.99,
     category: 'Kitchen',
     images: [
-      'assets/images/product-placeholder.svg'
+      'assets/images/kitchen-placeholder.svg'
     ],
     inventory: 35
   },
@@ -139,7 +139,7 @@ export const productSeeds = [
     price: 199.99,
     category: 'Kitchen',
     images: [
-      'assets/images/product-placeholder.svg'
+      'assets/images/kitchen-placeholder.svg'
     ],
     inventory: 25
   },
@@ -151,7 +151,7 @@ export const productSeeds = [
     price: 299.99,
     category: 'Fitness',
     images: [
-      'assets/images/product-placeholder.svg'
+      'assets/images/fitness-placeholder.svg'
     ],
     inventory: 20
   },
@@ -161,7 +161,7 @@ export const productSeeds = [
     price: 39.99,
     category: 'Fitness',
     images: [
-      'assets/images/product-placeholder.svg'
+      'assets/images/fitness-placeholder.svg'
     ],
     inventory: 90
   },
@@ -173,7 +173,7 @@ export const productSeeds = [
     price: 12.99,
     category: 'Fiction',
     images: [
-      'assets/images/product-placeholder.svg'
+      'assets/images/book-placeholder.svg'
     ],
     inventory: 200
   },
@@ -183,7 +183,7 @@ export const productSeeds = [
     price: 89.99,
     category: 'Educational',
     images: [
-      'assets/images/product-placeholder.svg'
+      'assets/images/book-placeholder.svg'
     ],
     inventory: 45
   }

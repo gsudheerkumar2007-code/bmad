@@ -1,8 +1,35 @@
 <svg width="400" height="400" xmlns="http://www.w3.org/2000/svg">
-  <rect width="400" height="400" fill="#f0f0f0" stroke="#ddd" stroke-width="2"/>
-  <text x="200" y="190" font-family="Arial, sans-serif" font-size="16" fill="#666" text-anchor="middle">Product Image</text>
-  <text x="200" y="220" font-family="Arial, sans-serif" font-size="14" fill="#999" text-anchor="middle">Placeholder</text>
-  <rect x="150" y="100" width="100" height="60" fill="none" stroke="#ccc" stroke-width="2" rx="5"/>
-  <circle cx="170" cy="120" r="8" fill="#ddd"/>
-  <polygon points="180,140 190,125 210,145 195,160" fill="#ddd"/>
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f8f9fa;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e9ecef;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6c757d;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#495057;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="400" height="400" fill="url(#bgGradient)" rx="12"/>
+
+  <!-- Border -->
+  <rect width="400" height="400" fill="none" stroke="#dee2e6" stroke-width="2" rx="12"/>
+
+  <!-- Shopping bag icon -->
+  <g transform="translate(200, 200)">
+    <!-- Bag body -->
+    <path d="M-40 -20 L40 -20 L35 60 L-35 60 Z" fill="url(#iconGradient)" rx="4"/>
+    <!-- Bag handles -->
+    <path d="M-25 -20 Q-25 -40 -10 -40 Q5 -40 5 -20" fill="none" stroke="url(#iconGradient)" stroke-width="4" stroke-linecap="round"/>
+    <path d="M25 -20 Q25 -40 10 -40 Q-5 -40 -5 -20" fill="none" stroke="url(#iconGradient)" stroke-width="4" stroke-linecap="round"/>
+    <!-- Bag details -->
+    <rect x="-30" y="-10" width="60" height="3" fill="#ffffff" opacity="0.3" rx="1"/>
+    <rect x="-25" y="10" width="50" height="2" fill="#ffffff" opacity="0.2" rx="1"/>
+    <rect x="-20" y="25" width="40" height="2" fill="#ffffff" opacity="0.2" rx="1"/>
+  </g>
+
+  <!-- Text -->
+  <text x="200" y="320" font-family="Arial, sans-serif" font-size="18" fill="#6c757d" text-anchor="middle" font-weight="500">Product Image</text>
+  <text x="200" y="345" font-family="Arial, sans-serif" font-size="14" fill="#adb5bd" text-anchor="middle">Coming Soon</text>
 </svg>
