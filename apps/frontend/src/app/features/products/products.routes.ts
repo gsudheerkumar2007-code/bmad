@@ -1,24 +1,11 @@
 import { Routes } from '@angular/router';
-import { Component } from '@angular/core';
-
-// Placeholder component for products feature - will be implemented in future stories
-@Component({
-  selector: 'app-products-placeholder',
-  standalone: true,
-  template: `
-    <div style="text-align: center; padding: 2rem;">
-      <h1>Products</h1>
-      <p>Products feature will be available soon!</p>
-      <p>This placeholder ensures navigation structure works correctly.</p>
-    </div>
-  `
-})
-export class ProductsPlaceholderComponent { }
+import { ProductListComponent } from './components/product-list/product-list.component';
+import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 
 export const productsRoutes: Routes = [
   {
     path: '',
-    component: ProductsPlaceholderComponent,
+    component: ProductListComponent,
     title: 'Products',
     data: {
       breadcrumb: 'All Products'
@@ -26,7 +13,7 @@ export const productsRoutes: Routes = [
   },
   {
     path: 'category/:categoryId',
-    component: ProductsPlaceholderComponent,
+    component: ProductListComponent,
     title: 'Products by Category',
     data: {
       breadcrumb: 'Category Products'
@@ -34,7 +21,7 @@ export const productsRoutes: Routes = [
   },
   {
     path: ':productId',
-    component: ProductsPlaceholderComponent,
+    component: ProductDetailComponent,
     title: 'Product Details',
     data: {
       breadcrumb: 'Product Details'

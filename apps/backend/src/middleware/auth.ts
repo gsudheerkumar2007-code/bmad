@@ -10,9 +10,10 @@ export const authenticateToken = async (req: AuthRequest, res: Response, next: N
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({
+      res.status(401).json({
         error: 'Access token is required'
       });
+      return;
     }
 
     const token = authHeader.substring(7);
@@ -29,9 +30,10 @@ export const authenticateToken = async (req: AuthRequest, res: Response, next: N
 
 export const requireAdmin = (req: AuthRequest, res: Response, next: NextFunction): void => {
   if (!req.user?.isAdmin) {
-    return res.status(403).json({
+    res.status(403).json({
       error: 'Admin access required'
     });
+    return;
   }
   next();
 };

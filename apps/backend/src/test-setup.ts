@@ -1,5 +1,6 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
+import 'jest-extended';
 
 let mongod: MongoMemoryServer;
 

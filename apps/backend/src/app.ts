@@ -5,11 +5,14 @@ import dotenv from 'dotenv';
 import { connectDatabase } from './config/database';
 import { validateEnvironment } from '@ecommerce/shared-utils';
 import { errorHandler } from './middleware/errorHandler';
+import { setupSwagger } from './config/swagger';
 // import { requestLogger } from './middleware/requestLogger';
 
 // Routes
 import authRoutes from './routes/auth';
 import healthRoutes from './routes/health';
+import productRoutes from './routes/products';
+import categoryRoutes from './routes/categories';
 
 // Load environment variables
 dotenv.config();
@@ -52,9 +55,17 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Request logging
 // app.use(requestLogger);
 
+// API Documentation
+setupSwagger(app);
+
+// Static file serving for uploads
+app.use('/uploads', express.static('uploads'));
+
 // Routes
 app.use('/api/health', healthRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/categories', categoryRoutes);
 
 // Error handling middleware (must be last)
 app.use(errorHandler);

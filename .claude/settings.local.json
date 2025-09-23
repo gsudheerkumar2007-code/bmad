@@ -3,7 +3,14 @@
     "allow": [
       "Bash(cat:*)",
       "Bash(npm test:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(mkdir:*)",
+      "Bash(npm run lint)",
+      "Bash(npx ng test:*)",
+      "Bash(grep:*)",
+      "Bash(curl:*)",
+      "Bash(python:*)",
+      "Bash(cmd /c:*)"
     ],
     "deny": [],
     "ask": []
