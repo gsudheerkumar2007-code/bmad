@@ -252,4 +252,129 @@ describe('ProductService', () => {
       expect(req2).toBeTruthy();
     });
   });
+
+  describe('getSearchSuggestions', () => {
+    it('should get search suggestions', () => {
+      const mockSuggestions = { suggestions: ['suggestion1', 'suggestion2'], query: 'test' };
+
+      service.getSearchSuggestions('test').subscribe(response => {
+        expect(response).toEqual(mockSuggestions);
+      });
+
+      const req = httpMock.expectOne('/api/products/search/suggestions?q=test&limit=10');
+      expect(req.request.method).toBe('GET');
+      req.flush(mockSuggestions);
+    });
+
+    it('should handle custom limit', () => {
+      const mockSuggestions = { suggestions: ['suggestion1'], query: 'test' };
+
+      service.getSearchSuggestions('test', 5).subscribe();
+
+      const req = httpMock.expectOne('/api/products/search/suggestions?q=test&limit=5');
+      req.flush(mockSuggestions);
+    });
+
+    it('should throw error for short query', () => {
+      service.getSearchSuggestions('a').subscribe({
+        next: () => fail('should have failed'),
+        error: (error) => {
+          expect(error.message).toBe('Query must be at least 2 characters');
+        }
+      });
+    });
+
+    it('should throw error for empty query', () => {
+      service.getSearchSuggestions('').subscribe({
+        next: () => fail('should have failed'),
+        error: (error) => {
+          expect(error.message).toBe('Query must be at least 2 characters');
+        }
+      });
+    });
+  });
+
+  describe('getCategories', () => {
+    it('should get categories with caching', () => {
+      const mockCategories = {
+        categories: [
+          { name: 'Electronics', count: 10 },
+          { name: 'Books', count: 5 }
+        ]
+      };
+
+      // First request
+      service.getCategories().subscribe(response => {
+        expect(response).toEqual(mockCategories);
+      });
+
+      // Second request - should use cache
+      service.getCategories().subscribe();
+
+      // Should only make one HTTP request due to caching
+      const req = httpMock.expectOne('/api/products/categories');
+      req.flush(mockCategories);
+    });
+  });
+
+  describe('getPriceRange', () => {
+    it('should get price range with caching', () => {
+      const mockPriceRange = { priceRange: { min: 10, max: 1000 } };
+
+      // First request
+      service.getPriceRange().subscribe(response => {
+        expect(response).toEqual(mockPriceRange);
+      });
+
+      // Second request - should use cache
+      service.getPriceRange().subscribe();
+
+      // Should only make one HTTP request due to caching
+      const req = httpMock.expectOne('/api/products/price-range');
+      req.flush(mockPriceRange);
+    });
+  });
+
+  describe('advancedSearch', () => {
+    it('should perform advanced search with filters', () => {
+      const filters = {
+        search: 'test',
+        categories: ['Electronics', 'Books'],
+        minPrice: 50,
+        maxPrice: 200,
+        sortBy: 'price',
+        sortOrder: 'asc',
+        page: 2,
+        limit: 10
+      };
+
+      service.advancedSearch(filters).subscribe();
+
+      const req = httpMock.expectOne(req => {
+        return req.url === '/api/products' &&
+               req.params.get('search') === 'test' &&
+               req.params.get('categories') === 'Electronics,Books' &&
+               req.params.get('minPrice') === '50' &&
+               req.params.get('maxPrice') === '200' &&
+               req.params.get('sort') === 'price' &&
+               req.params.get('page') === '2' &&
+               req.params.get('limit') === '10';
+      });
+
+      req.flush(mockProductListResponse);
+    });
+
+    it('should use default values for advanced search', () => {
+      service.advancedSearch({}).subscribe();
+
+      const req = httpMock.expectOne(req => {
+        return req.url === '/api/products' &&
+               req.params.get('page') === '1' &&
+               req.params.get('limit') === '20' &&
+               req.params.get('sort') === 'relevance';
+      });
+
+      req.flush(mockProductListResponse);
+    });
+  });
 });

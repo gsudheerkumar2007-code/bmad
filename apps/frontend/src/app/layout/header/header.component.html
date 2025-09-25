@@ -50,7 +50,7 @@
           <span class="user-name" *ngIf="!(isHandset$ | async)">{{ user.firstName }}</span>
           <mat-icon>arrow_drop_down</mat-icon>
         </button>
-        <mat-menu #userMenu="matMenu">
+        <mat-menu #userMenu="matMenu" xPosition="before" yPosition="below">
           <button mat-menu-item routerLink="/profile">
             <mat-icon>person</mat-icon>
             <span>Profile</span>

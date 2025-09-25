@@ -1,0 +1,190 @@
+<div class="filter-panel">
+  <div class="filter-header">
+    <h3>Filters</h3>
+    <button
+      mat-stroked-button
+      color="warn"
+      (click)="onClearAllFilters()"
+      [disabled]="getAppliedFiltersCount() === 0"
+      class="clear-filters-btn"
+    >
+      <mat-icon>clear_all</mat-icon>
+      Clear All
+    </button>
+  </div>
+
+  <!-- Applied Filters Chips -->
+  <div class="applied-filters" *ngIf="getAppliedFiltersCount() > 0">
+    <h4>Applied Filters ({{ getAppliedFiltersCount() }})</h4>
+    <mat-chip-set>
+      <mat-chip
+        *ngFor="let category of filters.categories"
+        (removed)="removeCategory(category)"
+        class="filter-chip"
+      >
+        {{ category }}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+
+      <mat-chip
+        *ngIf="filters.priceRange.min !== globalPriceRange.min || filters.priceRange.max !== globalPriceRange.max"
+        class="filter-chip price-chip"
+      >
+        Price: ${{ filters.priceRange.min }} - ${{ filters.priceRange.max }}
+      </mat-chip>
+
+      <mat-chip
+        *ngIf="filters.sortBy !== 'relevance'"
+        class="filter-chip"
+      >
+        Sort: {{ getSortLabel(filters.sortBy) }} ({{ filters.sortOrder === 'asc' ? 'A-Z' : 'Z-A' }})
+      </mat-chip>
+    </mat-chip-set>
+  </div>
+
+  <!-- Filter Accordion -->
+  <mat-accordion class="filter-accordion">
+    <!-- Categories Filter -->
+    <mat-expansion-panel expanded="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>category</mat-icon>
+          Categories
+          <span class="filter-count" *ngIf="filters.categories.length > 0">
+            ({{ filters.categories.length }})
+          </span>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="category-filter-content">
+        <div *ngIf="isLoadingCategories" class="loading-container">
+          <mat-spinner diameter="24"></mat-spinner>
+          <span>Loading categories...</span>
+        </div>
+
+        <div *ngIf="!isLoadingCategories && availableCategories.length === 0" class="no-categories">
+          No categories available
+        </div>
+
+        <div *ngIf="!isLoadingCategories" class="category-list">
+          <mat-checkbox
+            *ngFor="let category of availableCategories"
+            [checked]="isCategorySelected(category.name)"
+            (change)="onCategoryChange(category.name, $event.checked)"
+            class="category-checkbox"
+          >
+            <span class="category-name">{{ category.name }}</span>
+            <span class="category-count">({{ category.count }})</span>
+          </mat-checkbox>
+        </div>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- Price Range Filter -->
+    <mat-expansion-panel expanded="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>attach_money</mat-icon>
+          Price Range
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="price-filter-content">
+        <div *ngIf="isLoadingPriceRange" class="loading-container">
+          <mat-spinner diameter="24"></mat-spinner>
+          <span>Loading price range...</span>
+        </div>
+
+        <div *ngIf="!isLoadingPriceRange" class="price-controls">
+          <div class="price-inputs">
+            <mat-form-field appearance="outline" class="price-input">
+              <mat-label>Min Price</mat-label>
+              <input
+                matInput
+                type="number"
+                [value]="localPriceRange.min"
+                (blur)="onMinPriceInput($any($event.target).value || '0')"
+                [min]="globalPriceRange.min"
+                [max]="localPriceRange.max"
+              />
+              <span matPrefix>$</span>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="price-input">
+              <mat-label>Max Price</mat-label>
+              <input
+                matInput
+                type="number"
+                [value]="localPriceRange.max"
+                (blur)="onMaxPriceInput($any($event.target).value || '0')"
+                [min]="localPriceRange.min"
+                [max]="globalPriceRange.max"
+              />
+              <span matPrefix>$</span>
+            </mat-form-field>
+          </div>
+
+          <div class="price-slider">
+            <mat-slider
+              [min]="globalPriceRange.min"
+              [max]="globalPriceRange.max"
+              [step]="1"
+              class="price-range-slider"
+            >
+              <input
+                matSliderStartThumb
+                [(ngModel)]="localPriceRange.min"
+                (ngModelChange)="onPriceRangeChange()"
+              />
+              <input
+                matSliderEndThumb
+                [(ngModel)]="localPriceRange.max"
+                (ngModelChange)="onPriceRangeChange()"
+              />
+            </mat-slider>
+          </div>
+
+          <div class="price-display">
+            <span>${{ localPriceRange.min }} - ${{ localPriceRange.max }}</span>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- Sort Options -->
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>sort</mat-icon>
+          Sort Options
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="sort-filter-content">
+        <mat-form-field appearance="outline" class="sort-field">
+          <mat-label>Sort by</mat-label>
+          <mat-select
+            [(ngModel)]="filters.sortBy"
+            (selectionChange)="onSortChange()"
+          >
+            <mat-option *ngFor="let option of sortOptions" [value]="option.value">
+              {{ option.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="sort-field">
+          <mat-label>Order</mat-label>
+          <mat-select
+            [(ngModel)]="filters.sortOrder"
+            (selectionChange)="onSortChange()"
+          >
+            <mat-option *ngFor="let option of sortOrderOptions" [value]="option.value">
+              {{ option.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

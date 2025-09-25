@@ -1,0 +1,102 @@
+<div class="search-results-container">
+  <!-- Results Header -->
+  <div class="results-header" *ngIf="!loading && !error">
+    <div class="results-info">
+      <h2 class="results-title">{{ getSearchSummary() }}</h2>
+      <p class="results-count">{{ getResultsText() }}</p>
+    </div>
+
+    <div class="results-controls" *ngIf="results && results.totalCount > 0">
+      <mat-form-field appearance="outline" class="sort-field">
+        <mat-label>Sort by</mat-label>
+        <mat-select
+          [value]="getCurrentSortValue()"
+          (selectionChange)="onSortChange($event.value)"
+        >
+          <mat-option *ngFor="let option of sortOptions" [value]="option.value">
+            {{ option.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <mat-divider *ngIf="!loading && !error && results"></mat-divider>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="loading">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Searching products...</p>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-container" *ngIf="error && !loading">
+    <div class="error-content">
+      <mat-icon class="error-icon">error_outline</mat-icon>
+      <h3>Search Error</h3>
+      <p>{{ error }}</p>
+      <button mat-raised-button color="primary" (click)="onRetry()">
+        <mat-icon>refresh</mat-icon>
+        Try Again
+      </button>
+    </div>
+  </div>
+
+  <!-- No Results State -->
+  <div class="no-results-container" *ngIf="!loading && !error && results && results.totalCount === 0">
+    <div class="no-results-content">
+      <mat-icon class="no-results-icon">search_off</mat-icon>
+      <h3>No products found</h3>
+      <p>We couldn't find any products matching your search criteria.</p>
+
+      <div class="suggestions">
+        <h4>Try adjusting your search:</h4>
+        <ul>
+          <li>Check your spelling</li>
+          <li>Use more general keywords</li>
+          <li>Remove some filters</li>
+          <li>Try different categories</li>
+        </ul>
+      </div>
+
+      <button mat-raised-button color="primary" (click)="onRetry()">
+        <mat-icon>refresh</mat-icon>
+        Search Again
+      </button>
+    </div>
+  </div>
+
+  <!-- Results Grid -->
+  <div class="results-content" *ngIf="!loading && !error && results && results.totalCount > 0">
+    <div class="products-grid">
+      <app-product-card
+        *ngFor="let product of results.products; trackBy: trackByProductId"
+        [product]="product"
+        (click)="onProductClick(product)"
+        (addToCart)="$event && onProductClick($event)"
+        (quickView)="$event && onProductClick($event)"
+        class="product-card-item"
+      >
+      </app-product-card>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination-container" *ngIf="showPagination && results.totalPages > 1">
+      <mat-paginator
+        [length]="results.totalCount"
+        [pageSize]="pageSize"
+        [pageIndex]="results.currentPage - 1"
+        [pageSizeOptions]="[10, 20, 50, 100]"
+        [showFirstLastButtons]="true"
+        (page)="onPageChange($event)"
+        aria-label="Select page of search results"
+      >
+      </mat-paginator>
+    </div>
+
+    <!-- Results Summary Footer -->
+    <div class="results-footer" *ngIf="results.totalCount > pageSize">
+      <p class="footer-text">{{ getResultsText() }}</p>
+    </div>
+  </div>
+</div>

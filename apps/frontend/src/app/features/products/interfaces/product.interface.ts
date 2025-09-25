@@ -29,11 +29,13 @@ export interface ProductListResponse {
 
 export interface ProductFilters {
   category?: string;
+  categories?: string[]; // Multiple categories support
   minPrice?: number;
   maxPrice?: number;
   search?: string;
   inStock?: boolean;
   tags?: string[];
+  sortBy?: 'price' | 'name' | 'relevance' | 'createdAt';
 }
 
 export interface ProductQuery {
@@ -41,4 +43,45 @@ export interface ProductQuery {
   limit?: number;
   sort?: string;
   filters?: ProductFilters;
+}
+
+export interface SearchSuggestion {
+  suggestions: string[];
+  query: string;
+}
+
+export interface CategoryInfo {
+  name: string;
+  count: number;
+}
+
+export interface CategoriesResponse {
+  categories: CategoryInfo[];
+}
+
+export interface PriceRange {
+  min: number;
+  max: number;
+}
+
+export interface PriceRangeResponse {
+  priceRange: PriceRange;
+}
+
+export interface SearchFilters {
+  searchTerm: string;
+  categories: string[];
+  priceRange: { min: number; max: number };
+  sortBy: 'price' | 'name' | 'relevance' | 'createdAt';
+  sortOrder: 'asc' | 'desc';
+}
+
+export interface SearchState {
+  filters: SearchFilters;
+  results: Product[];
+  loading: boolean;
+  totalResults: number;
+  currentPage: number;
+  totalPages: number;
+  suggestions: string[];
 }

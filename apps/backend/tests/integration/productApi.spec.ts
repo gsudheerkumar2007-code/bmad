@@ -196,4 +196,285 @@ describe('Product API Integration Tests', () => {
       expect(responseTime).toBeLessThan(1000);
     });
   });
+
+  describe('GET /api/products/search/suggestions - Search Suggestions API', () => {
+    beforeEach(async () => {
+      await Product.create([
+        {
+          name: 'Apple iPhone 15',
+          description: 'Latest Apple smartphone',
+          price: 999.99,
+          category: 'Electronics',
+          inventory: 10,
+          isActive: true
+        },
+        {
+          name: 'Apple MacBook Pro',
+          description: 'Professional laptop',
+          price: 1999.99,
+          category: 'Computers',
+          inventory: 5,
+          isActive: true
+        }
+      ]);
+    });
+
+    it('should return search suggestions', async () => {
+      const response = await request(app)
+        .get('/api/products/search/suggestions?q=Apple')
+        .expect(200);
+
+      expect(response.body).toHaveProperty('suggestions');
+      expect(response.body).toHaveProperty('query', 'Apple');
+      expect(Array.isArray(response.body.suggestions)).toBe(true);
+      expect(response.body.suggestions.length).toBeGreaterThanOrEqual(0);
+    });
+
+    it('should return 400 for short query', async () => {
+      const response = await request(app)
+        .get('/api/products/search/suggestions?q=A')
+        .expect(400);
+
+      expect(response.body.error.code).toBe('E011');
+      expect(response.body.error.message).toBe('Invalid suggestion request');
+    });
+
+    it('should return 400 for missing query', async () => {
+      const response = await request(app)
+        .get('/api/products/search/suggestions')
+        .expect(400);
+
+      expect(response.body.error.code).toBe('E011');
+    });
+  });
+
+  describe('GET /api/products/categories - Categories API', () => {
+    beforeEach(async () => {
+      await Product.create([
+        {
+          name: 'Product 1',
+          description: 'Description',
+          price: 99.99,
+          category: 'Electronics',
+          inventory: 10,
+          isActive: true
+        },
+        {
+          name: 'Product 2',
+          description: 'Description',
+          price: 199.99,
+          category: 'Electronics',
+          inventory: 5,
+          isActive: true
+        },
+        {
+          name: 'Product 3',
+          description: 'Description',
+          price: 299.99,
+          category: 'Books',
+          inventory: 8,
+          isActive: true
+        }
+      ]);
+    });
+
+    it('should return categories with counts', async () => {
+      const response = await request(app)
+        .get('/api/products/categories')
+        .expect(200);
+
+      expect(response.body).toHaveProperty('categories');
+      expect(Array.isArray(response.body.categories)).toBe(true);
+
+      if (response.body.categories.length > 0) {
+        const category = response.body.categories[0];
+        expect(category).toHaveProperty('name');
+        expect(category).toHaveProperty('count');
+        expect(typeof category.count).toBe('number');
+      }
+    });
+
+    it('should sort categories by count (descending)', async () => {
+      const response = await request(app)
+        .get('/api/products/categories')
+        .expect(200);
+
+      const categories = response.body.categories;
+      if (categories.length > 1) {
+        for (let i = 0; i < categories.length - 1; i++) {
+          expect(categories[i].count).toBeGreaterThanOrEqual(categories[i + 1].count);
+        }
+      }
+    });
+  });
+
+  describe('GET /api/products/price-range - Price Range API', () => {
+    beforeEach(async () => {
+      await Product.create([
+        {
+          name: 'Cheap Product',
+          description: 'Description',
+          price: 10.99,
+          category: 'Electronics',
+          inventory: 10,
+          isActive: true
+        },
+        {
+          name: 'Expensive Product',
+          description: 'Description',
+          price: 999.99,
+          category: 'Electronics',
+          inventory: 5,
+          isActive: true
+        }
+      ]);
+    });
+
+    it('should return price range', async () => {
+      const response = await request(app)
+        .get('/api/products/price-range')
+        .expect(200);
+
+      expect(response.body).toHaveProperty('priceRange');
+      expect(response.body.priceRange).toHaveProperty('min');
+      expect(response.body.priceRange).toHaveProperty('max');
+      expect(typeof response.body.priceRange.min).toBe('number');
+      expect(typeof response.body.priceRange.max).toBe('number');
+      expect(response.body.priceRange.min).toBeLessThanOrEqual(response.body.priceRange.max);
+    });
+
+    it('should return correct min and max values', async () => {
+      const response = await request(app)
+        .get('/api/products/price-range')
+        .expect(200);
+
+      expect(response.body.priceRange.min).toBe(10.99);
+      expect(response.body.priceRange.max).toBe(999.99);
+    });
+  });
+
+  describe('GET /api/products/search - Text Search API', () => {
+    beforeEach(async () => {
+      await Product.create([
+        {
+          name: 'iPhone 15',
+          description: 'Latest Apple smartphone',
+          price: 999.99,
+          category: 'Electronics',
+          inventory: 10,
+          isActive: true
+        },
+        {
+          name: 'Samsung Galaxy',
+          description: 'Android smartphone',
+          price: 899.99,
+          category: 'Electronics',
+          inventory: 5,
+          isActive: true
+        }
+      ]);
+    });
+
+    it('should search products by text', async () => {
+      const response = await request(app)
+        .get('/api/products/search?q=smartphone')
+        .expect(200);
+
+      expect(response.body).toHaveProperty('products');
+      expect(response.body).toHaveProperty('searchTerm', 'smartphone');
+      expect(response.body).toHaveProperty('count');
+      expect(Array.isArray(response.body.products)).toBe(true);
+    });
+
+    it('should return 400 for missing search term', async () => {
+      const response = await request(app)
+        .get('/api/products/search')
+        .expect(400);
+
+      expect(response.body.error.code).toBe('E010');
+      expect(response.body.error.message).toBe('Search term is required');
+    });
+
+    it('should limit search results', async () => {
+      const response = await request(app)
+        .get('/api/products/search?q=smartphone&limit=1')
+        .expect(200);
+
+      expect(response.body.products.length).toBeLessThanOrEqual(1);
+    });
+  });
+
+  describe('Advanced Search Filtering', () => {
+    beforeEach(async () => {
+      await Product.create([
+        {
+          name: 'iPhone 15',
+          description: 'Smartphone',
+          price: 999.99,
+          category: 'Electronics',
+          inventory: 10,
+          isActive: true
+        },
+        {
+          name: 'Samsung Galaxy',
+          description: 'Smartphone',
+          price: 899.99,
+          category: 'Electronics',
+          inventory: 5,
+          isActive: true
+        },
+        {
+          name: 'MacBook Pro',
+          description: 'Laptop',
+          price: 1999.99,
+          category: 'Computers',
+          inventory: 3,
+          isActive: true
+        }
+      ]);
+    });
+
+    it('should filter by multiple categories', async () => {
+      const response = await request(app)
+        .get('/api/products?categories=Electronics,Computers')
+        .expect(200);
+
+      expect(response.body.products.every((p: any) =>
+        ['Electronics', 'Computers'].includes(p.category)
+      )).toBe(true);
+    });
+
+    it('should filter by price range', async () => {
+      const response = await request(app)
+        .get('/api/products?minPrice=900&maxPrice=1000')
+        .expect(200);
+
+      expect(response.body.products.every((p: any) =>
+        p.price >= 900 && p.price <= 1000
+      )).toBe(true);
+    });
+
+    it('should combine search with filters', async () => {
+      const response = await request(app)
+        .get('/api/products?search=smartphone&category=Electronics&maxPrice=950')
+        .expect(200);
+
+      expect(response.body.products.every((p: any) =>
+        p.category === 'Electronics' && p.price <= 950
+      )).toBe(true);
+    });
+
+    it('should sort by price', async () => {
+      const response = await request(app)
+        .get('/api/products?sort=price&sortOrder=asc')
+        .expect(200);
+
+      const products = response.body.products;
+      if (products.length > 1) {
+        for (let i = 0; i < products.length - 1; i++) {
+          expect(products[i].price).toBeLessThanOrEqual(products[i + 1].price);
+        }
+      }
+    });
+  });
 });

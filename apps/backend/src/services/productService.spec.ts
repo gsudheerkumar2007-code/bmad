@@ -14,12 +14,18 @@ describe('ProductService', () => {
     await Product.deleteMany({});
     await Category.deleteMany({});
 
-    // Create test category
-    const category = new Category({
-      name: 'Electronics',
-      description: 'Electronic devices'
-    });
-    await category.save();
+    // Create test categories
+    const categories = [
+      { name: 'Electronics', description: 'Electronic devices' },
+      { name: 'Mobile', description: 'Mobile devices' },
+      { name: 'Books', description: 'Books and publications' },
+      { name: 'Clothing', description: 'Clothing and accessories' }
+    ];
+
+    for (const categoryData of categories) {
+      const category = new Category(categoryData);
+      await category.save();
+    }
   });
 
   describe('createProduct', () => {
@@ -349,6 +355,239 @@ describe('ProductService', () => {
       const results = await productService.searchProducts('smartphone', 1);
 
       expect(results.length).toBe(1);
+    });
+  });
+
+  describe('getSearchSuggestions', () => {
+    beforeEach(async () => {
+      const products = [
+        {
+          name: 'Apple iPhone 15',
+          description: 'Latest Apple smartphone',
+          price: 999,
+          category: 'Electronics'
+        },
+        {
+          name: 'Apple MacBook',
+          description: 'Apple laptop computer',
+          price: 1999,
+          category: 'Electronics'
+        },
+        {
+          name: 'Samsung Galaxy',
+          description: 'Android smartphone',
+          price: 899,
+          category: 'Mobile'
+        }
+      ];
+
+      for (const productData of products) {
+        await productService.createProduct(productData);
+      }
+    });
+
+    it('should return suggestions for valid query', async () => {
+      const suggestions = await productService.getSearchSuggestions('Apple');
+
+      expect(suggestions.length).toBeGreaterThan(0);
+      expect(suggestions).toContain('Apple iPhone 15');
+      expect(suggestions).toContain('Apple MacBook');
+    });
+
+    it('should return category suggestions', async () => {
+      const suggestions = await productService.getSearchSuggestions('Electr');
+
+      expect(suggestions).toContain('Electronics');
+    });
+
+    it('should return empty array for short query', async () => {
+      const suggestions = await productService.getSearchSuggestions('A');
+
+      expect(suggestions).toEqual([]);
+    });
+
+    it('should return empty array for empty query', async () => {
+      const suggestions = await productService.getSearchSuggestions('');
+
+      expect(suggestions).toEqual([]);
+    });
+
+    it('should limit suggestions', async () => {
+      const suggestions = await productService.getSearchSuggestions('Apple', 1);
+
+      expect(suggestions.length).toBeLessThanOrEqual(1);
+    });
+
+    it('should remove duplicates', async () => {
+      const suggestions = await productService.getSearchSuggestions('Apple');
+
+      const uniqueSuggestions = [...new Set(suggestions)];
+      expect(suggestions.length).toBe(uniqueSuggestions.length);
+    });
+  });
+
+  describe('getCategories', () => {
+    beforeEach(async () => {
+      const products = [
+        {
+          name: 'Product 1',
+          description: 'Description 1',
+          price: 99,
+          category: 'Electronics'
+        },
+        {
+          name: 'Product 2',
+          description: 'Description 2',
+          price: 199,
+          category: 'Electronics'
+        },
+        {
+          name: 'Product 3',
+          description: 'Description 3',
+          price: 299,
+          category: 'Books'
+        }
+      ];
+
+      for (const productData of products) {
+        await productService.createProduct(productData);
+      }
+    });
+
+    it('should return distinct categories', async () => {
+      const categories = await productService.getCategories();
+
+      expect(categories).toContain('Electronics');
+      expect(categories).toContain('Books');
+      expect(categories.length).toBe(2);
+    });
+
+    it('should only return categories from active products', async () => {
+      // Create inactive product with different category
+      const inactiveProduct = {
+        name: 'Inactive Product',
+        description: 'Description',
+        price: 99,
+        category: 'Inactive Category',
+        isActive: false
+      };
+
+      await Product.create(inactiveProduct);
+
+      const categories = await productService.getCategories();
+
+      expect(categories).not.toContain('Inactive Category');
+    });
+  });
+
+  describe('getCategoryHierarchy', () => {
+    beforeEach(async () => {
+      const products = [
+        {
+          name: 'Product 1',
+          description: 'Description 1',
+          price: 99,
+          category: 'Electronics'
+        },
+        {
+          name: 'Product 2',
+          description: 'Description 2',
+          price: 199,
+          category: 'Electronics'
+        },
+        {
+          name: 'Product 3',
+          description: 'Description 3',
+          price: 299,
+          category: 'Books'
+        }
+      ];
+
+      for (const productData of products) {
+        await productService.createProduct(productData);
+      }
+    });
+
+    it('should return category counts', async () => {
+      const hierarchy = await productService.getCategoryHierarchy();
+
+      expect(hierarchy['Electronics']).toBe(2);
+      expect(hierarchy['Books']).toBe(1);
+    });
+
+    it('should only count active products', async () => {
+      // Create inactive product
+      await Product.create({
+        name: 'Inactive Product',
+        description: 'Description',
+        price: 99,
+        category: 'Electronics',
+        isActive: false
+      });
+
+      const hierarchy = await productService.getCategoryHierarchy();
+
+      expect(hierarchy['Electronics']).toBe(2); // Should still be 2, not 3
+    });
+  });
+
+  describe('getPriceRange', () => {
+    beforeEach(async () => {
+      const products = [
+        {
+          name: 'Cheap Product',
+          description: 'Description',
+          price: 10.99,
+          category: 'Electronics'
+        },
+        {
+          name: 'Mid Product',
+          description: 'Description',
+          price: 50.99,
+          category: 'Electronics'
+        },
+        {
+          name: 'Expensive Product',
+          description: 'Description',
+          price: 999.99,
+          category: 'Electronics'
+        }
+      ];
+
+      for (const productData of products) {
+        await productService.createProduct(productData);
+      }
+    });
+
+    it('should return min and max prices', async () => {
+      const priceRange = await productService.getPriceRange();
+
+      expect(priceRange.min).toBe(10.99);
+      expect(priceRange.max).toBe(999.99);
+    });
+
+    it('should only consider active products', async () => {
+      // Add inactive expensive product
+      await Product.create({
+        name: 'Inactive Expensive',
+        description: 'Description',
+        price: 1999.99,
+        category: 'Electronics',
+        isActive: false
+      });
+
+      const priceRange = await productService.getPriceRange();
+
+      expect(priceRange.max).toBe(999.99); // Should ignore inactive product
+    });
+
+    it('should return zero range when no products exist', async () => {
+      await Product.deleteMany({});
+
+      const priceRange = await productService.getPriceRange();
+
+      expect(priceRange.min).toBe(0);
+      expect(priceRange.max).toBe(0);
     });
   });
 });

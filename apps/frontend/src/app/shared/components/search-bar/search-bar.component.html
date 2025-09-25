@@ -1,0 +1,58 @@
+<div class="search-bar-container">
+  <mat-form-field appearance="outline" class="search-field">
+    <mat-label>{{ placeholder }}</mat-label>
+    <input
+      matInput
+      [(ngModel)]="searchTerm"
+      (input)="onInputChange($any($event.target).value || '')"
+      (keydown)="onKeyPress($event)"
+      [matAutocomplete]="autoComplete"
+      class="search-input"
+    />
+
+    <button
+      *ngIf="searchTerm && !isLoading"
+      matSuffix
+      mat-icon-button
+      aria-label="Clear search"
+      (click)="clearSearch()"
+      class="clear-button"
+    >
+      <mat-icon>clear</mat-icon>
+    </button>
+
+    <mat-spinner
+      *ngIf="isLoading"
+      matSuffix
+      diameter="20"
+      class="loading-spinner"
+    ></mat-spinner>
+
+    <mat-autocomplete
+      #autoComplete="matAutocomplete"
+      [displayWith]="null"
+      class="search-autocomplete"
+    >
+      <mat-option
+        *ngFor="let suggestion of suggestions"
+        [value]="suggestion"
+        (onSelectionChange)="$event.isUserInput && onSuggestionSelect(suggestion)"
+        class="suggestion-option"
+      >
+        <span [innerHTML]="suggestion"></span>
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <button
+    *ngIf="showSearchButton"
+    mat-raised-button
+    color="primary"
+    (click)="onSearch()"
+    [disabled]="!searchTerm.trim()"
+    class="search-button"
+  >
+    <mat-icon>search</mat-icon>
+    <span class="button-text">Search</span>
+  </button>
+</div>

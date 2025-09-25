@@ -4,10 +4,12 @@ import mongoose from 'mongoose';
 
 export interface ProductFilters {
   category?: string;
+  categories?: string[]; // Multiple categories support
   search?: string;
   isActive?: boolean;
   minPrice?: number;
   maxPrice?: number;
+  sortBy?: 'price' | 'name' | 'relevance' | 'createdAt';
 }
 
 export interface PaginationOptions {
@@ -64,6 +66,11 @@ export class ProductService {
       query.category = filters.category;
     }
 
+    // Multiple categories support
+    if (filters.categories && filters.categories.length > 0) {
+      query.category = { $in: filters.categories };
+    }
+
     if (filters.isActive !== undefined) {
       query.isActive = filters.isActive;
     }
@@ -95,6 +102,10 @@ export class ProductService {
       sort = { [options.sort]: sortOrder };
     }
 
+    // Special handling for text search relevance sorting
+    if (filters.search && filters.sortBy === 'relevance') {
+      sort = { score: { $meta: 'textScore' } };
+    }
     // Execute query with pagination
     const [products, totalItems] = await Promise.all([
       Product.find(query)
@@ -217,5 +228,71 @@ export class ProductService {
 
   async getInactiveProducts(): Promise<IProduct[]> {
     return await Product.find({ isActive: false }).sort({ createdAt: -1 });
+  }
+
+  async getSearchSuggestions(query: string, limit: number = 10): Promise<string[]> {
+    if (!query || query.length < 2) {
+      return [];
+    }
+
+    const regex = new RegExp(query, 'i');
+
+    // Get suggestions from product names
+    const nameMatches = await Product.distinct('name', {
+      name: { $regex: regex },
+      isActive: true
+    });
+
+    // Get suggestions from categories
+    const categoryMatches = await Product.distinct('category', {
+      category: { $regex: regex },
+      isActive: true
+    });
+
+    // Combine and limit suggestions
+    const allSuggestions = [...nameMatches, ...categoryMatches]
+      .filter(suggestion => suggestion.toLowerCase().includes(query.toLowerCase()))
+      .slice(0, limit);
+
+    return Array.from(new Set(allSuggestions)); // Remove duplicates
+  }
+
+  async getCategories(): Promise<string[]> {
+    return await Product.distinct('category', { isActive: true });
+  }
+
+  async getCategoryHierarchy(): Promise<{ [key: string]: number }> {
+    const pipeline: any[] = [
+      { $match: { isActive: true } },
+      { $group: { _id: '$category', count: { $sum: 1 } } },
+      { $sort: { count: -1 } }
+    ];
+
+    const results = await Product.aggregate(pipeline);
+    const hierarchy: { [key: string]: number } = {};
+
+    results.forEach(result => {
+      hierarchy[result._id] = result.count;
+    });
+
+    return hierarchy;
+  }
+
+  async getPriceRange(): Promise<{ min: number; max: number }> {
+    const pipeline: any[] = [
+      { $match: { isActive: true } },
+      {
+        $group: {
+          _id: null,
+          minPrice: { $min: '$price' },
+          maxPrice: { $max: '$price' }
+        }
+      }
+    ];
+
+    const result = await Product.aggregate(pipeline);
+    return result.length > 0
+      ? { min: result[0].minPrice || 0, max: result[0].maxPrice || 0 }
+      : { min: 0, max: 0 };
   }
 }

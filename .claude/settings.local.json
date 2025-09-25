@@ -10,7 +10,8 @@
       "Bash(grep:*)",
       "Bash(curl:*)",
       "Bash(python:*)",
-      "Bash(cmd /c:*)"
+      "Bash(cmd /c:*)",
+      "Bash(awk:*)"
     ],
     "deny": [],
     "ask": []

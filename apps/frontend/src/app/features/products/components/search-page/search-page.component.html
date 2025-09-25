@@ -1,0 +1,87 @@
+<div class="search-page">
+  <!-- Search Header -->
+  <div class="search-header">
+    <div class="search-header-content">
+      <app-search-bar
+        [initialValue]="getCurrentFilters().searchTerm"
+        [placeholder]="'Search products...'"
+        [showSearchButton]="true"
+        (search)="onSearch($event)"
+        (suggestionSelected)="onSuggestionSelected($event)"
+        class="search-bar"
+      ></app-search-bar>
+
+      <button
+        mat-icon-button
+        *ngIf="isHandset"
+        (click)="onToggleFilters()"
+        class="filter-toggle-btn"
+        [class.active]="sidenavOpened"
+      >
+        <mat-icon>filter_list</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content with Sidenav -->
+  <mat-sidenav-container class="search-container">
+    <!-- Filters Sidebar -->
+    <mat-sidenav
+      #sidenav
+      [mode]="isHandset ? 'over' : 'side'"
+      [opened]="sidenavOpened"
+      [fixedInViewport]="isHandset"
+      [fixedTopGap]="56"
+      class="filters-sidenav"
+    >
+      <div class="filters-header" *ngIf="isHandset">
+        <h3>Filters</h3>
+        <button mat-icon-button (click)="onToggleFilters()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <app-filter-panel
+        [filters]="getCurrentFilters()"
+        (filtersChange)="onFiltersChange($event)"
+        (clearFilters)="onClearFilters()"
+        class="filter-panel"
+      ></app-filter-panel>
+    </mat-sidenav>
+
+    <!-- Search Results Content -->
+    <mat-sidenav-content class="search-content">
+      <div class="content-wrapper">
+        <!-- Mobile Filter Toggle (when sidenav is closed) -->
+        <div class="mobile-filter-bar" *ngIf="isHandset && !sidenavOpened">
+          <button
+            mat-stroked-button
+            (click)="onToggleFilters()"
+            class="mobile-filter-btn"
+          >
+            <mat-icon>filter_list</mat-icon>
+            Filters
+            <span *ngIf="getCurrentFilters().categories.length > 0" class="filter-count">
+              ({{ getCurrentFilters().categories.length }})
+            </span>
+          </button>
+        </div>
+
+        <!-- Search Results -->
+        <app-search-results
+          [results]="searchResults"
+          [loading]="isLoading"
+          [error]="error"
+          [filters]="getCurrentFilters()"
+          [showPagination]="true"
+          [pageSize]="pageSize"
+          (pageChange)="onPageChange($event)"
+          (sortChange)="onSortChange($event)"
+          (productClick)="onProductClick($event)"
+          (retrySearch)="onRetrySearch()"
+          class="search-results"
+        ></app-search-results>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

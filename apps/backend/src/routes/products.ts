@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { ProductController } from '../controllers/productController';
 import { authenticateToken, requireAdmin, optionalAuth, AuthRequest } from '../middleware/auth';
 import { upload, handleUploadError, getFileUrl } from '../config/upload';
+import { searchSuggestionsLimiter } from '../middleware/rateLimit';
 
 const router = Router();
 const productController = new ProductController();
@@ -9,6 +10,9 @@ const productController = new ProductController();
 // Public routes (no authentication required)
 router.get('/', (req, res, next) => productController.getProducts(req, res, next));
 router.get('/search', (req, res, next) => productController.searchProducts(req, res, next));
+router.get('/search/suggestions', searchSuggestionsLimiter, (req, res, next) => productController.getSearchSuggestions(req, res, next));
+router.get('/categories', (req, res, next) => productController.getCategories(req, res, next));
+router.get('/price-range', (req, res, next) => productController.getPriceRange(req, res, next));
 router.get('/category/:category', (req, res, next) => productController.getProductsByCategory(req, res, next));
 router.get('/:id', (req, res, next) => productController.getProductById(req, res, next));
 

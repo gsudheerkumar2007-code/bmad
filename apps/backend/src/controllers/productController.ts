@@ -33,13 +33,22 @@ export class ProductController {
   private readonly querySchema = Joi.object({
     page: Joi.number().min(1).default(1),
     limit: Joi.number().min(1).max(100).default(20),
-    sort: Joi.string().valid('name', 'price', 'createdAt', 'inventory').default('createdAt'),
+    sort: Joi.string().valid('name', 'price', 'createdAt', 'inventory', 'relevance').default('createdAt'),
     sortOrder: Joi.string().valid('asc', 'desc').default('desc'),
     category: Joi.string(),
+    categories: Joi.string().custom((value, helpers) => {
+      // Allow comma-separated categories
+      return value.split(',').map((cat: string) => cat.trim()).filter(Boolean);
+    }),
     search: Joi.string(),
     isActive: Joi.boolean(),
     minPrice: Joi.number().min(0),
     maxPrice: Joi.number().min(0)
+  });
+
+  private readonly suggestionSchema = Joi.object({
+    q: Joi.string().min(2).required(),
+    limit: Joi.number().min(1).max(20).default(10)
   });
 
   async createProduct(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -88,10 +97,12 @@ export class ProductController {
       // Extract filters and pagination options
       const filters: ProductFilters = {
         category: value.category,
+        categories: value.categories,
         search: value.search,
         isActive: value.isActive,
         minPrice: value.minPrice,
-        maxPrice: value.maxPrice
+        maxPrice: value.maxPrice,
+        sortBy: value.sort
       };
 
       const options: PaginationOptions = {
@@ -318,6 +329,61 @@ export class ProductController {
         products,
         searchTerm,
         count: products.length
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getSearchSuggestions(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      // Validate query parameters
+      const { error, value } = this.suggestionSchema.validate(req.query);
+      if (error) {
+        res.status(400).json({
+          error: {
+            code: 'E011',
+            message: 'Invalid suggestion request',
+            details: error.details.map(detail => detail.message),
+            timestamp: new Date().toISOString()
+          }
+        });
+        return;
+      }
+
+      const suggestions = await this.productService.getSearchSuggestions(value.q, value.limit);
+
+      res.status(200).json({
+        suggestions,
+        query: value.q
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getCategories(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const categories = await this.productService.getCategories();
+      const hierarchy = await this.productService.getCategoryHierarchy();
+
+      res.status(200).json({
+        categories: categories.map(category => ({
+          name: category,
+          count: hierarchy[category] || 0
+        })).sort((a, b) => b.count - a.count)
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getPriceRange(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const priceRange = await this.productService.getPriceRange();
+
+      res.status(200).json({
+        priceRange
       });
     } catch (error) {
       next(error);
